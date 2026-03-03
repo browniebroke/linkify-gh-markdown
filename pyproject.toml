@@ -40,6 +40,7 @@ dev = [
   "pytest==9.*",
   "pytest-cov==7.*",
   "sybil[pytest]",
+  "ty==0.*",
 ]
 
 [tool.ruff]
@@ -103,23 +104,6 @@ report.exclude_lines = [
   "if TYPE_CHECKING",
   "pragma: no cover",
   "raise NotImplementedError",
-]
-
-[tool.mypy]
-check_untyped_defs = true
-disallow_any_generics = true
-disallow_incomplete_defs = true
-disallow_untyped_defs = true
-mypy_path = "src/"
-no_implicit_optional = true
-show_error_codes = true
-warn_unreachable = true
-warn_unused_ignores = true
-exclude = [
-  "setup.py",
-]
-overrides = [
-  { module = "tests.*", allow_untyped_defs = true },
 ]
 
 [tool.semantic_release]

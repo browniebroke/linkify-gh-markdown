@@ -43,10 +43,33 @@ Install this via pip (or your favourite package manager):
 
 ## Usage
 
-Call the command line interface:
+This tool processes a markdown file and converts plain text GitHub references into proper markdown links:
+
+- `@username` mentions become `[@username](https://github.com/username)`
+- Pull request URLs like `https://github.com/owner/repo/pull/123` become `[#123](https://github.com/owner/repo/pull/123)`
+
+The result is printed to stdout.
 
 ```bash
-linkify-gh-markdown --help
+linkify-gh-markdown path/to/file.md
+```
+
+```
+ Usage: linkify-gh-markdown [OPTIONS] INPUT_PATH
+
+ Add the arguments and print the result.
+
+╭─ Arguments ─────────────────────────────────────────────────────╮
+│ *    input_path      TEXT  [required]                           │
+╰─────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────╮
+│ --install-completion    Install completion for the current      │
+│                         shell.                                  │
+│ --show-completion       Show completion for the current shell,  │
+│                         to copy it or customize the             │
+│                         installation.                           │
+│ --help                  Show this message and exit.             │
+╰─────────────────────────────────────────────────────────────────╯
 ```
 
 ## Contributors ✨
