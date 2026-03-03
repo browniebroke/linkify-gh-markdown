@@ -1,0 +1,25 @@
+# Changes here will be overwritten by Copier
+_commit: 984a3ed
+_src_path: gh:34j/pypackage-template
+add_me_as_contributor: true
+cli_name: linkify-gh-markdown
+copyright_year: '2026'
+documentation: false
+email: oss@browniebroke.com
+full_name: Bruno Alla
+github_app_installation_ids: ''
+github_username: browniebroke
+has_cli: true
+initial_commit: true
+is_django_package: false
+open_source_license: MIT
+open_with_editor: false
+package_name: linkify_gh_markdown
+project_name: Linkify GitHub Markdown
+project_short_description: Turn URLs and handles in GitHub markdown into actual links
+    to GitHub issues, pull requests or user profiles.
+project_slug: linkify-gh-markdown
+run_uv_sync: true
+setup_github: true
+setup_pre_commit: true
+
