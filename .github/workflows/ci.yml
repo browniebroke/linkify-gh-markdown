@@ -11,14 +11,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  type-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-      - uses: pre-commit/action@v3.0.1
+      - uses: astral-sh/setup-uv@v7
+      - run: uv run ty check
 
   # Make sure commit messages follow the conventional commits convention:
   # https://www.conventionalcommits.org
@@ -64,8 +62,8 @@ jobs:
 
   release:
     needs:
+      - type-check
       - test
-      - lint
       - commitlint
 
     runs-on: ubuntu-latest
