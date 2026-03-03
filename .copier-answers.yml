@@ -1,13 +1,12 @@
 # Changes here will be overwritten by Copier
-_commit: 984a3ed
-_src_path: gh:34j/pypackage-template
+_commit: ee4a730
+_src_path: gh:browniebroke/pypackage-template
 add_me_as_contributor: true
 cli_name: linkify-gh-markdown
 copyright_year: '2026'
 documentation: false
 email: oss@browniebroke.com
 full_name: Bruno Alla
-github_app_installation_ids: ''
 github_username: browniebroke
 has_cli: true
 initial_commit: true
