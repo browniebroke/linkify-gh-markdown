@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import typer
-from rich import print
 
 from .main import linkify
 
