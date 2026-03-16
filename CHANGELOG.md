@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.1.0 (2026-03-16)
+
+### Features
+
+- Add support for linking compare ([`514e13d`](https://github.com/browniebroke/linkify-gh-markdown/commit/514e13ddd73ac352a9a50e5138bfe19453defe83))
+
+### Bug fixes
+
+- Don't treat `@` signs in code bits as usernames ([`7e8d39b`](https://github.com/browniebroke/linkify-gh-markdown/commit/7e8d39b300299cc129fc84adb13e9244da68d5a9))
+
 ## v1.0.1 (2026-03-16)
 
 ### Bug fixes
