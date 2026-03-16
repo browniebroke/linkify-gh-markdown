@@ -55,6 +55,11 @@ class TestAddGithubProfileLinks:
         result = add_github_profile_links(text)
         assert result == text
 
+    def test_code_fenced_is_ignored(self):
+        text = "This is not a username it's some `@api_view` code"
+        result = add_github_profile_links(text)
+        assert result == text
+
 
 class TestAddPullRequestLinks:
     def test_simple_pr_url(self):
