@@ -1,4 +1,5 @@
 from linkify_gh_markdown.main import (
+    add_compare_links,
     add_github_profile_links,
     add_pull_request_links,
     get_link_ranges,
@@ -59,6 +60,42 @@ class TestAddGithubProfileLinks:
         text = "This is not a username it's some `@api_view` code"
         result = add_github_profile_links(text)
         assert result == text
+
+
+class TestAddCompareLinks:
+    def test_simple_compare_url(self):
+        url = "https://github.com/owner/repo/compare/3.2.1...3.1.0"
+        result = add_compare_links(url)
+        assert result == f"[3.2.1...3.1.0]({url})"
+
+    def test_multiple_compare_urls(self):
+        content = (
+            "https://github.com/owner/repo/compare/1.0.0...1.1.0 "
+            "and https://github.com/owner/repo/compare/2.0.0...2.1.0"
+        )
+        result = add_compare_links(content)
+        assert result == (
+            "[1.0.0...1.1.0](https://github.com/owner/repo/compare/1.0.0...1.1.0)"
+            " and "
+            "[2.0.0...2.1.0](https://github.com/owner/repo/compare/2.0.0...2.1.0)"
+        )
+
+    def test_skip_existing_link(self):
+        text = (
+            "[3.16.1...3.17.0](https://github.com/owner/repo/compare/3.16.1...3.17.0)"
+        )
+        result = add_compare_links(text)
+        assert result == text
+
+    def test_no_compare_urls(self):
+        text = "No compare URLs here."
+        result = add_compare_links(text)
+        assert result == text
+
+    def test_repo_with_hyphens(self):
+        url = "https://github.com/my-org/my-repo/compare/v1.0...v2.0"
+        result = add_compare_links(url)
+        assert result == f"[v1.0...v2.0]({url})"
 
 
 class TestAddPullRequestLinks:

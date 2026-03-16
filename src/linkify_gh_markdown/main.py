@@ -4,6 +4,7 @@ import re
 def linkify(content: str) -> str:
     """Add GitHub links to given content."""
     content = add_pull_request_links(content)
+    content = add_compare_links(content)
     content = add_github_profile_links(content)
     return content
 
@@ -42,6 +43,24 @@ def add_github_profile_links(content: str) -> str:
         return f"[@{username}](https://github.com/{url_username})"
 
     return re.sub(r"@([\w-]+(?:\[bot\])?)", replace, content)
+
+
+def add_compare_links(content: str) -> str:
+    """Convert compare URLs to markdown links in format [tag1...tag2](url)."""
+    link_ranges = get_link_ranges(content)
+
+    def replace(match: re.Match) -> str:
+        if any(s <= match.start() < e for s, e in link_ranges):
+            return match.group(0)
+        from_tag = match.group(3)
+        to_tag = match.group(4)
+        return f"[{from_tag}...{to_tag}]({match.group(0)})"
+
+    return re.sub(
+        r"https://github\.com/([\w\-]+)/([\w\-]+)/compare/([\w\.\-]+)\.\.\.([\w\.\-]+)",
+        replace,
+        content,
+    )
 
 
 def add_pull_request_links(content: str) -> str:
