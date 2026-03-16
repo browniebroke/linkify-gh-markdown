@@ -14,19 +14,28 @@ def get_link_ranges(text: str) -> list[tuple[int, int]]:
     return [(m.start(), m.end()) for m in re.finditer(pattern, text)]
 
 
+def get_code_ranges(text: str) -> list[tuple[int, int]]:
+    """Get character ranges of inline code spans."""
+    pattern = r"`[^`]+`"
+    return [(m.start(), m.end()) for m in re.finditer(pattern, text)]
+
+
 def add_github_profile_links(content: str) -> str:
     """Convert @username mentions to GitHub profile links."""
     link_ranges = get_link_ranges(content)
+    code_ranges = get_code_ranges(content)
+    skip_ranges = link_ranges + code_ranges
 
     def replace(match: re.Match) -> str:
         start, end = match.span()
         username = match.group(1)
 
-        # Skip if inside existing link or is a decorator like @versioning_class()
-        is_inside_link = any(s <= start < e for s, e in link_ranges)
+        # Skip if inside existing link, code span,
+        # or is a decorator like @versioning_class()
+        is_inside_skip = any(s <= start < e for s, e in skip_ranges)
         is_decorator = end < len(content) and content[end] == "("
 
-        if is_inside_link or is_decorator:
+        if is_inside_skip or is_decorator:
             return match.group(0)
 
         url_username = username.replace("[bot]", "[bot]")
