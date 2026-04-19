@@ -1,7 +1,10 @@
+from unittest.mock import patch
+
 from linkify_gh_markdown.main import (
     add_compare_links,
     add_github_profile_links,
     add_pull_request_links,
+    change_heading_level,
     get_link_ranges,
     linkify,
     remove_html_comments,
@@ -155,6 +158,70 @@ class TestRemoveHtmlComments:
         assert result == ""
 
 
+class TestChangeHeadingLevel:
+    def test_no_headings(self):
+        text = "No headings here."
+        assert change_heading_level(text, 3) == text
+
+    def test_single_heading_increase(self):
+        result = change_heading_level("## title\n", 3)
+        assert result == "### title\n"
+
+    def test_single_heading_decrease(self):
+        result = change_heading_level("### title\n", 2)
+        assert result == "## title\n"
+
+    def test_multiple_headings_preserve_hierarchy(self):
+        content = "## title\n\n### section 1\nLorem\n\n### section 2\nBlah\n"
+        expected = "### title\n\n#### section 1\nLorem\n\n#### section 2\nBlah\n"
+        assert change_heading_level(content, 3) == expected
+
+    def test_already_at_target_level(self):
+        content = "## title\n\n### section\n"
+        assert change_heading_level(content, 2) == content
+
+    def test_headings_capped_at_six(self):
+        content = "## title\n\n### section\n"
+        result = change_heading_level(content, 6)
+        assert result == "###### title\n\n###### section\n"
+
+    def test_heading_in_code_block_not_changed(self):
+        content = "## real heading\n\n```\n## not a heading\n```\n"
+        result = change_heading_level(content, 3)
+        assert result == "### real heading\n\n```\n## not a heading\n```\n"
+
+    def test_h1_input(self):
+        result = change_heading_level("# title\n\n## section\n", 2)
+        assert result == "## title\n\n### section\n"
+
+    def test_single_heading_increase_by_two(self):
+        result = change_heading_level("## title\n", 4)
+        assert result == "#### title\n"
+
+    def test_multiple_headings_increase_by_three(self):
+        content = "## title\n\n### section 1\nLorem\n\n### section 2\nBlah\n"
+        expected = "##### title\n\n###### section 1\nLorem\n\n###### section 2\nBlah\n"
+        assert change_heading_level(content, 5) == expected
+
+    def test_h1_increase_by_four(self):
+        result = change_heading_level("# title\n\n## section\n\n### subsection\n", 5)
+        assert result == "##### title\n\n###### section\n\n###### subsection\n"
+
+    def test_single_heading_decrease_by_two(self):
+        result = change_heading_level("#### title\n", 2)
+        assert result == "## title\n"
+
+    def test_multiple_headings_decrease_by_three(self):
+        content = "#### title\n\n##### section 1\nLorem\n\n##### section 2\nBlah\n"
+        expected = "# title\n\n## section 1\nLorem\n\n## section 2\nBlah\n"
+        assert change_heading_level(content, 1) == expected
+
+    def test_h4_decrease_by_two_preserve_hierarchy(self):
+        content = "#### title\n\n##### section\n\n###### subsection\n"
+        result = change_heading_level(content, 2)
+        assert result == "## title\n\n### section\n\n#### subsection\n"
+
+
 class TestLinkify:
     def test_linkify(self):
         input_content = "Fixed by @octocat in https://github.com/owner/repo/pull/99\n"
@@ -172,3 +239,28 @@ class TestLinkify:
         assert "<!-- internal note -->" not in result
         assert "[@octocat](https://github.com/octocat)" in result
         assert "[#99](https://github.com/owner/repo/pull/99)" in result
+
+    def test_linkify_with_heading_level(self):
+        content = "## title\n\nFixed by @octocat\n"
+        result = linkify(content, heading_level=3)
+        assert result.startswith("### title")
+        assert "[@octocat](https://github.com/octocat)" in result
+
+    def test_linkify_without_heading_level_unchanged(self):
+        content = "## title\n"
+        result = linkify(content)
+        assert result.startswith("## title")
+
+
+class TestMain:
+    def test_module_runs_as_script(self, tmp_path):
+        import runpy
+
+        import pytest
+
+        input_file = tmp_path / "input.md"
+        input_file.write_text("## title\n")
+        with patch("sys.argv", ["linkify-gh-markdown", str(input_file)]):
+            with pytest.raises(SystemExit) as exc_info:
+                runpy.run_module("linkify_gh_markdown", run_name="__main__")
+        assert exc_info.value.code == 0

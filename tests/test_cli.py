@@ -23,3 +23,27 @@ def test_cli_output_matches_linkify(tmp_path):
 
     assert result.exit_code == 0
     assert result.output.strip() == expected.strip()
+
+
+def test_cli_heading_level_option(tmp_path):
+    input_text = "## title\n\n### section\n"
+    input_file = tmp_path / "input.md"
+    input_file.write_text(input_text)
+
+    result = runner.invoke(app, [str(input_file), "--heading-level", "3"])
+
+    assert result.exit_code == 0
+    assert "### title" in result.output
+    assert "#### section" in result.output
+
+
+def test_cli_heading_level_not_provided_keeps_original(tmp_path):
+    input_text = "## title\n\n### section\n"
+    input_file = tmp_path / "input.md"
+    input_file.write_text(input_text)
+
+    result = runner.invoke(app, [str(input_file)])
+
+    assert result.exit_code == 0
+    assert "## title" in result.output
+    assert "### section" in result.output
