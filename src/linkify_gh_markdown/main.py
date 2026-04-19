@@ -21,9 +21,7 @@ def change_heading_level(content: str, top_level: int) -> str:
     for line in lines:
         if line.startswith("```"):
             in_code_block = not in_code_block
-        if not in_code_block and line.startswith("#"):
-            match = re.match(r"^(#+)", line)
-            assert match is not None
+        if not in_code_block and (match := re.match(r"^(#+)", line)):
             heading_levels.append(len(match.group(1)))
 
     if not heading_levels:
@@ -43,9 +41,7 @@ def change_heading_level(content: str, top_level: int) -> str:
             in_code_block = not in_code_block
             result_lines.append(line)
             continue
-        if not in_code_block and line.startswith("#"):
-            match = re.match(r"^(#+)(.*)", line)
-            assert match is not None
+        if not in_code_block and (match := re.match(r"^(#+)(.*)", line)):
             current_level = len(match.group(1))
             new_level = min(current_level + offset, 6)
             line = "#" * new_level + match.group(2)
