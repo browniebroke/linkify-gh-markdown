@@ -4,6 +4,7 @@ from linkify_gh_markdown.main import (
     add_pull_request_links,
     get_link_ranges,
     linkify,
+    remove_html_comments,
 )
 
 
@@ -132,11 +133,42 @@ class TestAddPullRequestLinks:
         assert result == f"[#42]({url})"
 
 
+class TestRemoveHtmlComments:
+    def test_single_comment(self):
+        result = remove_html_comments("before <!-- comment --> after")
+        assert result == "before  after"
+
+    def test_multiline_comment(self):
+        result = remove_html_comments("before\n<!-- multi\nline\ncomment -->\nafter")
+        assert result == "before\n\nafter"
+
+    def test_multiple_comments(self):
+        result = remove_html_comments("a <!-- one --> b <!-- two --> c")
+        assert result == "a  b  c"
+
+    def test_no_comments(self):
+        result = remove_html_comments("no comments here")
+        assert result == "no comments here"
+
+    def test_comment_only(self):
+        result = remove_html_comments("<!-- just a comment -->")
+        assert result == ""
+
+
 class TestLinkify:
     def test_linkify(self):
         input_content = "Fixed by @octocat in https://github.com/owner/repo/pull/99\n"
 
         result = linkify(input_content)
 
+        assert "[@octocat](https://github.com/octocat)" in result
+        assert "[#99](https://github.com/owner/repo/pull/99)" in result
+
+    def test_linkify_removes_html_comments(self):
+        input_content = "Fixed by @octocat <!-- internal note --> in https://github.com/owner/repo/pull/99\n"
+
+        result = linkify(input_content)
+
+        assert "<!-- internal note -->" not in result
         assert "[@octocat](https://github.com/octocat)" in result
         assert "[#99](https://github.com/owner/repo/pull/99)" in result

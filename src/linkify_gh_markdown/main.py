@@ -3,10 +3,16 @@ import re
 
 def linkify(content: str) -> str:
     """Add GitHub links to given content."""
+    content = remove_html_comments(content)
     content = add_pull_request_links(content)
     content = add_compare_links(content)
     content = add_github_profile_links(content)
     return content
+
+
+def remove_html_comments(content: str) -> str:
+    """Remove HTML comments from the given content."""
+    return re.sub(r"<!--.*?-->", "", content, flags=re.DOTALL)
 
 
 def get_link_ranges(text: str) -> list[tuple[int, int]]:
