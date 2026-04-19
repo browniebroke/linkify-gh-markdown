@@ -54,6 +54,12 @@ The result is printed to stdout.
 linkify-gh-markdown path/to/file.md
 ```
 
+Use `--heading-level` to shift all headings so the top-level heading in the output is at the given level (1–6):
+
+```bash
+linkify-gh-markdown --heading-level 2 path/to/file.md
+```
+
 ```
  Usage: linkify-gh-markdown [OPTIONS] INPUT_PATH
 
@@ -63,12 +69,15 @@ linkify-gh-markdown path/to/file.md
 │ *    input_path      TEXT  [required]                           │
 ╰─────────────────────────────────────────────────────────────────╯
 ╭─ Options ───────────────────────────────────────────────────────╮
-│ --install-completion    Install completion for the current      │
-│                         shell.                                  │
-│ --show-completion       Show completion for the current shell,  │
-│                         to copy it or customize the             │
-│                         installation.                           │
-│ --help                  Show this message and exit.             │
+│ --heading-level     INTEGER RANGE [1<=x<=6]                     │
+│                             Set the top heading level in the    │
+│                             output (1-6).                       │
+│ --install-completion        Install completion for the current  │
+│                             shell.                              │
+│ --show-completion           Show completion for the current     │
+│                             shell, to copy it or customize the  │
+│                             installation.                       │
+│ --help                      Show this message and exit.         │
 ╰─────────────────────────────────────────────────────────────────╯
 ```
 
