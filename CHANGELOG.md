@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.0 (2026-04-19)
+
+### Features
+
+- Add `--heading-level` option to shift heading levels in output ([`47898da`](https://github.com/browniebroke/linkify-gh-markdown/commit/47898da90b8df029f9bda08f31c1723e557b4aed))
+- Strip html comments from markdown before linkifying ([`18a4396`](https://github.com/browniebroke/linkify-gh-markdown/commit/18a4396ab85e3b56cfb646618d260a8e9dd47d84))
+
 ## v1.1.0 (2026-03-16)
 
 ### Features
