@@ -1,13 +1,58 @@
 import re
 
 
-def linkify(content: str) -> str:
+def linkify(content: str, heading_level: int | None = None) -> str:
     """Add GitHub links to given content."""
     content = remove_html_comments(content)
     content = add_pull_request_links(content)
     content = add_compare_links(content)
     content = add_github_profile_links(content)
+    if heading_level is not None:
+        content = change_heading_level(content, heading_level)
     return content
+
+
+def change_heading_level(content: str, top_level: int) -> str:
+    """Adjust all heading levels so the topmost heading starts at top_level."""
+    lines = content.split("\n")
+    in_code_block = False
+    heading_levels = []
+
+    for line in lines:
+        if line.startswith("```"):
+            in_code_block = not in_code_block
+        if not in_code_block and line.startswith("#"):
+            match = re.match(r"^(#+)", line)
+            if match:
+                heading_levels.append(len(match.group(1)))
+
+    if not heading_levels:
+        return content
+
+    current_top = min(heading_levels)
+    offset = top_level - current_top
+
+    if offset == 0:
+        return content
+
+    result_lines = []
+    in_code_block = False
+
+    for line in lines:
+        if line.startswith("```"):
+            in_code_block = not in_code_block
+            result_lines.append(line)
+            continue
+        if not in_code_block and line.startswith("#"):
+            match = re.match(r"^(#+)(.*)", line)
+            if match:
+                current_level = len(match.group(1))
+                new_level = min(current_level + offset, 6)
+                new_level = max(new_level, 1)
+                line = "#" * new_level + match.group(2)
+        result_lines.append(line)
+
+    return "\n".join(result_lines)
 
 
 def remove_html_comments(content: str) -> str:
