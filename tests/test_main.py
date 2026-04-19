@@ -193,20 +193,7 @@ class TestChangeHeadingLevel:
         assert result == "## title\n\n### section\n"
 
 
-class TestLinkifyWithHeadingLevel:
-    def test_linkify_with_heading_level(self):
-        content = "## title\n\nFixed by @octocat\n"
-        result = linkify(content, heading_level=3)
-        assert result.startswith("### title")
-        assert "[@octocat](https://github.com/octocat)" in result
-
-    def test_linkify_without_heading_level_unchanged(self):
-        content = "## title\n"
-        result = linkify(content)
-        assert result.startswith("## title")
-
-
-
+class TestLinkify:
     def test_linkify(self):
         input_content = "Fixed by @octocat in https://github.com/owner/repo/pull/99\n"
 
@@ -223,3 +210,14 @@ class TestLinkifyWithHeadingLevel:
         assert "<!-- internal note -->" not in result
         assert "[@octocat](https://github.com/octocat)" in result
         assert "[#99](https://github.com/owner/repo/pull/99)" in result
+
+    def test_linkify_with_heading_level(self):
+        content = "## title\n\nFixed by @octocat\n"
+        result = linkify(content, heading_level=3)
+        assert result.startswith("### title")
+        assert "[@octocat](https://github.com/octocat)" in result
+
+    def test_linkify_without_heading_level_unchanged(self):
+        content = "## title\n"
+        result = linkify(content)
+        assert result.startswith("## title")

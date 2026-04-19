@@ -48,7 +48,6 @@ def change_heading_level(content: str, top_level: int) -> str:
             if match:
                 current_level = len(match.group(1))
                 new_level = min(current_level + offset, 6)
-                new_level = max(new_level, 1)
                 line = "#" * new_level + match.group(2)
         result_lines.append(line)
 
