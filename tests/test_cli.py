@@ -47,4 +47,3 @@ def test_cli_heading_level_not_provided_keeps_original(tmp_path):
     assert result.exit_code == 0
     assert "## title" in result.output
     assert "### section" in result.output
-

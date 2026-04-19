@@ -215,7 +215,8 @@ class TestChangeHeadingLevel:
         assert change_heading_level(content, 1) == expected
 
     def test_h4_decrease_by_two_preserve_hierarchy(self):
-        result = change_heading_level("#### title\n\n##### section\n\n###### subsection\n", 2)
+        content = "#### title\n\n##### section\n\n###### subsection\n"
+        result = change_heading_level(content, 2)
         assert result == "## title\n\n### section\n\n#### subsection\n"
 
 
