@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from linkify_gh_markdown.main import (
     add_compare_links,
     add_github_profile_links,
@@ -248,3 +250,17 @@ class TestLinkify:
         content = "## title\n"
         result = linkify(content)
         assert result.startswith("## title")
+
+
+class TestMain:
+    def test_module_runs_as_script(self, tmp_path):
+        import runpy
+
+        import pytest
+
+        input_file = tmp_path / "input.md"
+        input_file.write_text("## title\n")
+        with patch("sys.argv", ["linkify-gh-markdown", str(input_file)]):
+            with pytest.raises(SystemExit) as exc_info:
+                runpy.run_module("linkify_gh_markdown", run_name="__main__")
+        assert exc_info.value.code == 0
