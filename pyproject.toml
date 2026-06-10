@@ -40,7 +40,7 @@ dev = [
   "pytest==9.*",
   "pytest-cov==7.*",
   "sybil[pytest]",
-  "ty==0.0.46",
+  "ty==0.0.47",
 ]
 
 [tool.ruff]
