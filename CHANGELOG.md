@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.3.0 (2026-08-07)
+
+### Features
+
+- Add support for python 3.15 ([`3309949`](https://github.com/browniebroke/linkify-gh-markdown/commit/33099495a56ccc8d1e2fc82c015999ad265cd8a3))
+
+### Documentation
+
+- Update readme to document --heading-level cli option ([`809c031`](https://github.com/browniebroke/linkify-gh-markdown/commit/809c031629ff3b6d0a37c633566c479df8718c97))
+
 ## v1.2.0 (2026-04-19)
 
 ### Features
