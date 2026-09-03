@@ -5,7 +5,9 @@ requires = [ "setuptools>=77.0.3" ]
 [project]
 name = "linkify-gh-markdown"
 version = "1.3.0"
-description = "Turn URLs and handles in GitHub markdown into actual links to GitHub issues, pull requests or user profiles."
+description = """\
+  Turn URLs and handles in GitHub markdown into actual links to GitHub issues, pull requests or user profiles.\
+  """
 readme = "README.md"
 license = "MIT"
 authors = [
@@ -130,5 +132,5 @@ changelog.exclude_commit_patterns = [
   "test(?:\\([^)]*?\\))?: .+",
   "build\\((?!deps\\): .+)",
   "Merged? .*",
-  "Initial [Cc]ommit.*",         # codespell:ignore
+  "Initial [Cc]ommit.*",           # codespell:ignore
 ]
