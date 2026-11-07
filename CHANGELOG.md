@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.0 (2026-11-07)
+
+### Features
+
+- Drop support for python 3.10 ([`b1b8241`](https://github.com/browniebroke/linkify-gh-markdown/commit/b1b8241fb6e67e111dec018981a744486ac1e611))
+
 ## v1.3.0 (2026-08-07)
 
 ### Features
